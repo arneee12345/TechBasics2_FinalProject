@@ -8,6 +8,9 @@
 ---
 
 ## Change Log
-Dec 15: Swapped 10k res for 1M. Signal is stronger.
+
+Dec 15: Initialized PlatformIO project configuration for the Arduino Uno board.
 
 Dec 15: Installed PlatformIO (PIO) in VS Code to bypass Arduino's mandatory folder naming rules and make it easier to work in (my fav) VS Code.
+
+Dec 15: Swapped 10k res for 1M. Signal is stronger.
