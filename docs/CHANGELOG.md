@@ -9,6 +9,8 @@
 
 ## Change Log
 
-Dec 15: Swapped 10k res for 1M. Signal is stronger.
+Dec 16: Tried adding clothes pins and alu foil for fixed contact to fingers, but it kinda hurts after a while... So currently the user just holds the ends of the wires lightly with the pointer finger and thumb on both hands.
+
+Dec 15: Swapped 10k resistor for 1M. Signal is stronger.
 
 Dec 15: Tried to use platformIO to work in VS Code but I got very confused so I kept working in the Arduino IDE.
