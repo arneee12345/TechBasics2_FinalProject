@@ -1,161 +1,185 @@
 /*
- * GSR Lie Detector Project - v4.3 (Final Cleaned Code)
- * Reads skin resistance to detect stress responses.
- * Workflow: Button Press -> Analyzing (Yellow + Center Jitter) -> Result (Left/Right Swing)
- * * HARDWARE NOTE: LEDs moved to 4,5,6 to fix timer conflict with Servo.
+ * Lie Detector Project - Final Version!
+ * Measures skin resistance (GSR) to detect stress.
+ * * Logic:
+ * 1. User (Suspect) holds sensors.
+ * 2. Interviewer presses button -> System calibrates an average baseline.
+ * 3. If sensor value drops below baseline (stress), it counts up.
+ * 4. High stress count = Lie.
  */
 
 #include <Servo.h>
 
-// --- PIN DEFINITIONS ---
+// Pins
 const int sensorPin = A0; 
 const int buttonPin = 2; 
 const int buzzerPin = 8; 
-const int servoPin = 7;  // Control pin for the Polygraph Needle (Servo Motor)
+const int servoPin = 7; 
 
-// RGB LED Pins - Assigned to avoid timer conflicts
-const int redPin = 4;    // Digital Only (Non-PWM)
-const int greenPin = 5;  // PWM Capable
-const int bluePin = 6;   // PWM Capable
+// RGB LED Pins
+const int redPin = 4;    
+const int greenPin = 5;  
+const int bluePin = 6;   
 
-// --- CONFIGURATION ---
-const int threshold = 10;        // Sensor sensitivity for detecting a spike
-const int analyzeTime = 6000;    // Duration for measuring stress (6 seconds)
-const int resultTime = 5000;     // Duration to display the final result (5 seconds)
-const float alpha = 0.005;       // Smoothing factor for the baseline calculation
+// Settings
+const int sensitivity = 10;       // Lower value = more sensitive
+const int lieThreshold = 25;     // How much stress is needed for a lie
+const int openCircuitVal = 1000; // Check if user is holding the wires
+const int analyzeTime = 6000;    // Time to ask question (ms)
+const int resultTime = 5000;     // Time to show result (ms)
 
-// --- GLOBAL VARIABLES ---
-float baseline = 0;
+// Variables
+int lockedBaseline = 0;          
+int stressScore = 0;             
 bool lieDetected = false;        
 unsigned long timer = 0;
-unsigned long lastTick = 0;      // Stores the time of the last audio tick/servo jitter
-int mode = 0;                    // State tracker: 0: Idle, 1: Analyzing, 2: Result
+unsigned long lastTick = 0;      
+int mode = 0; // 0=Idle, 1=Analyzing, 2=Result
 
-Servo needle;                    // Creates the servo object for the physical needle
+Servo needle; 
 
-// Function to set the RGB color
+// Helper to set LED color
 void setColor(int r, int g, int b) {
   if (r > 127) digitalWrite(redPin, HIGH); else digitalWrite(redPin, LOW);
   analogWrite(greenPin, g);
   analogWrite(bluePin, b);
 }
 
+// Calculates average baseline to avoid spikes
+int getStableBaseline() {
+  long sum = 0;
+  int samples = 20;
+  
+  setColor(0, 0, 255); //Blue for calibration
+  
+  for (int i = 0; i < samples; i++) {
+    sum += analogRead(sensorPin);
+    delay(20); 
+  }
+  
+  return sum / samples;
+}
+
 void setup() {
   Serial.begin(9600);
   
-  // Set all output/input modes
   pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
   pinMode(buzzerPin, OUTPUT);
   pinMode(buttonPin, INPUT_PULLUP);
+  pinMode(sensorPin, INPUT_PULLUP); 
   
-  // Attach servo and set initial position
   needle.attach(servoPin); 
-  needle.write(90);        // Set needle to Center (Ready position)
+  needle.write(90);        
   
-  // Startup Test Sequence (Flash, Beep, and Needle Sweep)
-  // This helps confirm all outputs are connected properly
-  setColor(255, 0, 0);   tone(buzzerPin, 440, 100); needle.write(170); delay(200); // Red + Right
-  setColor(0, 255, 0);   tone(buzzerPin, 550, 100); needle.write(10);  delay(200); // Green + Left
-  setColor(0, 0, 255);   tone(buzzerPin, 660, 100); needle.write(90);  delay(200); // Blue + Center
-  setColor(0, 0, 0);     // Turn off LEDs
-  
-  // Initialize baseline with current reading
-  baseline = analogRead(sensorPin);
+  // Startup Check
+  setColor(255, 0, 0);   tone(buzzerPin, 440, 100); needle.write(170); delay(200); 
+  setColor(0, 255, 0);   tone(buzzerPin, 550, 100); needle.write(10);  delay(200); 
+  setColor(0, 0, 255);   tone(buzzerPin, 660, 100); needle.write(90);  delay(200); 
+  setColor(0, 0, 0);     
 }
 
 void loop() {
   int sensorValue = analogRead(sensorPin);
   
-  // Check if button is pressed to START analysis
+  // Button logic
   if (digitalRead(buttonPin) == LOW && mode == 0) {
-      mode = 1;                // Switch to Analyzing mode
-      timer = millis();        // Start the analysis timer
-      baseline = sensorValue;  // Set new baseline at the start of the question
-      lieDetected = false;     
-      Serial.println("--- START ANALYSIS ---");
       
-      // Confirmation Tone
-      tone(buzzerPin, 1000, 100);
-      delay(300);              
+      // Check if holding sensors
+      if (sensorValue > openCircuitVal) {
+          Serial.println("Error: Hold sensors first");
+          tone(buzzerPin, 200, 300); 
+          setColor(255, 0, 255); // Purple for Error
+          delay(500);
+          setColor(0,0,0);
+      } 
+      else {
+          Serial.println("Calibrating...");
+          tone(buzzerPin, 1000, 50); 
+          delay(300); 
+          
+          lockedBaseline = getStableBaseline(); 
+          
+          stressScore = 0;
+          mode = 1;                
+          timer = millis();        
+          
+          Serial.print("Started. Baseline: ");
+          Serial.println(lockedBaseline);
+          
+          tone(buzzerPin, 1200, 100); 
+          delay(100);              
+      }
   }
 
-  // --- MAIN LOGIC STATE MACHINE ---
   switch (mode) {
     
-    case 0: // IDLE (Ready State)
-      setColor(0, 0, 0);
-      needle.write(90); // Hold steady at CENTER (Calibrated)
-      
-      // Continually update baseline in the background
-      baseline = (alpha * sensorValue) + ((1.0 - alpha) * baseline);
+    case 0: // Idle
+      setColor(0, 0, 0); 
+      needle.write(90); 
       break;
 
-    case 1: // ANALYZING (Tense State)
-      setColor(255, 50, 0); // Yellow/Orange
+    case 1: // Analyzing
+      setColor(255, 50, 0); // Orange
       
-      // Ticking Sound and Servo Jitter (Every 500ms)
+      // Tick sound and jitter
       if (millis() - lastTick > 500) {
         tone(buzzerPin, 2000, 20); 
         lastTick = millis();
-        
-        // Jitter around the CENTER (90 degrees) for tension
-        int jitter = random(80, 100);
-        needle.write(jitter);
+        needle.write(random(85, 95));
       }
 
-      // Continue tracking baseline and check for spikes
-      baseline = (alpha * sensorValue) + ((1.0 - alpha) * baseline);
-      
-      if (sensorValue < (baseline - threshold)) {
-          lieDetected = true;
+      // Check for stress (drop in resistance)
+      if (sensorValue < (lockedBaseline - sensitivity)) {
+          stressScore++; 
       }
 
-      // Check if analysis time is over
+      // Timer done
       if (millis() - timer > analyzeTime) {
          mode = 2; 
          timer = millis(); 
-         Serial.println("--- SHOW RESULT ---");
+         Serial.print("Score: ");
+         Serial.println(stressScore);
+         
+         if (stressScore > lieThreshold) {
+             lieDetected = true;
+         } else {
+             lieDetected = false;
+         }
          
          if (lieDetected) {
-            // LIE: Red Light, Low Tone, Needle Swing RIGHT (170)
             tone(buzzerPin, 100, 1000); 
             needle.write(170); 
          } else {
-            // TRUTH: Green Light, High Tone, Needle Swing LEFT (10)
             tone(buzzerPin, 1500, 150);
             delay(200);
             tone(buzzerPin, 2000, 400);
-            needle.write(10);  
+            needle.write(10); 
          }
       }
       break;
 
-    case 2: // RESULT (Final Verdict)
+    case 2: // Result
       if (lieDetected) {
-         setColor(255, 0, 0); // Red
+         setColor(255, 0, 0); 
       } else {
-         setColor(0, 255, 0); // Green
+         setColor(0, 255, 0); 
       }
 
-      // Reset to Idle after resultTime
       if (millis() - timer > resultTime) {
          mode = 0; 
-         Serial.println("--- RESET ---");
+         Serial.println("Reset");
       }
       break;
   }
 
-  // Output for Serial Plotter (for visualization and debugging)
-  Serial.print("Raw:");
-  Serial.print(sensorValue);
+  // Serial Plotter output
+  Serial.print("Value:");     Serial.print(sensorValue);
   Serial.print(",");
-  Serial.print("Baseline:");
-  Serial.print(baseline);
+  Serial.print("Baseline:");  Serial.print(lockedBaseline);
   Serial.print(",");
-  Serial.print("LieFound:");
-  Serial.println(lieDetected ? 800 : 0); 
+  Serial.print("Limit:");     Serial.println(lockedBaseline - sensitivity);
   
   delay(20);
 }
