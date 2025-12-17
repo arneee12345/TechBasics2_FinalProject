@@ -1,1 +1,72 @@
-# TechBasics2_FinalProject
+# Arduino Lie Detector 🕵️‍♂️💡
+
+**Final Project for Tech Basics 2** *Created by Arne Eckert*
+
+## 📖 Project Description
+For my final project, I built a functional **Lie Detector** (Polygraph) using an Arduino. The device works on the principle of **Galvanic Skin Response (GSR)**. 
+
+The theory is simple: when a person lies or gets stressed, they micro-sweat or twitch in the fingers. This (sweat or pressure) lowers the electrical resistance of their skin. My Lie Detector measures this resistance compared to a calibrated baseline. If the resistance drops significantly, the machine detects a "Lie," moves a servo needle, and buzzes the alarm.
+
+## 📺 Demo Video
+*[Insert link to your YouTube/Vimeo demo video here]*
+
+---
+
+## 🛠️ Hardware & Wiring
+The circuit uses a voltage divider to measure skin resistance, and various outputs to give the user feedback.
+
+### Components Used:
+* Arduino Uno
+* Servo Motor (the "Needle")
+* RGB LED (Status indicator)
+* Passive Buzzer (Audio Feedback)
+* Push Button (Calibration and Interrogation Start)
+* 2x Open wires (The DIY GSR-Sensor)
+* 1x 1MΩ Resistor
+* 3x 220Ω Resistors (for the RGB-LED)
+* a lot more cables to connect components
+
+### 🔌 Pinout Configuration
+| Component | Pin | Note |
+| :--- | :--- | :--- |
+| **GSR Sensor** | `A0` | Part of voltage divider circuit |
+| **Button** | `D2` | Input Pullup enabled |
+| **Red LED** | `D4` | |
+| **Green LED** | `D5` | |
+| **Blue LED** | `D6` | |
+| **Servo** | `D7` | Moves from 10° (Truth) to 170° (Lie), Jittering around 90° (Analyzing)| 
+| **Buzzer** | `D8` | |
+
+---
+
+## ⚙️ How It Works (The Logic)
+The code operates with three main modes:
+
+1.  **Idle & Check:** The system waits. If the sensor reads an "Open Circuit" (value > 1000), it warns the user to hold the sensors/purple error lights up.
+2.  **Calibration (Blue Light):** When the button is pressed, the Arduino takes 20 samples of the user's current skin resistance to calculate a "Locked Baseline."
+3.  **Analysis (Orange/Yellow Light):** The question can be asked and the user answers (its a specific time frame). It constantly compares the live sensor data to the baseline.
+    * *Math:* If `Current Value < (Baseline - Sensitivity)`, stress score increases.
+4.  **Verdict:**
+    * **Truth:** Green Light + Happy Sound + Needle moves to Truth.
+    * **Lie:** Red Light + Alarm Sound + Needle moves to Lie.
+
+---
+
+## 📝 Process Documentation
+I have documented the entire development journey, including the bugs I faced, the code changes, and physical prototyping.
+
+* **📄 [CHANGELOG.md](./CHANGELOG.md):** See the detailed history of code updates, hardware updates and the bugs I faced and fixed.
+* **📸 [/photos](./photos):** Check this folder for images of the prototyping and final design process.
+
+### Key Challenges I faced:
+**Sensitivity Tuning/Detection Logic:** Finding the right threshold and math to detect and calculate whether some changes in resistance can be considered a "lie" was difficult. I have tried many different approaches. Then thought I found a good one. However there was no real calibration. So, later I changed the logic again completely.
+
+---
+
+
+## 📚 References
+
+* *Course Materials from Tech Basics 2 seminar*
+* *Arduino `Servo.h` Library Documentation*
+* *[This YouTube tutorial for the basic idea](https://www.youtube.com/watch?v=8ogMm94AH80)*
+* *[This project documentation - same as the video](https://projecthub.arduino.cc/BuildItDR/arduino-lie-detector-41f703#section1)*
