@@ -2,7 +2,7 @@
 
 ## Current Status
 Functional Interactive Prototype. Everything is implemented and working so far. 
-**To Do:** Packaging this nicely and looking at the "LieDetected" Logic again, since the results sometimes buggy.
+**To Do:** Packaging the prototype nicely.
 
 ---
 
