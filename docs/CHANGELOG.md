@@ -8,6 +8,10 @@ Functional Interactive Prototype. Everything is implemented and working so far.
 
 ## Change Log
 
+Dec 17: Corrected/Improved the GSR "LieDetection" Logic. Now it identifies all spikes or uncommon movements in resistance and counts them up all together. If certain threshold is crossed it is considered to be a LIE. Otherwise it is considered the TRUTH.
+
+Dec 17: Updated the button and LED logic. If button is pressed there is 1s blue LED for calibration time. And purple LED if open circuit. Which means if the user doesn't hold the cables it doesn't start (Error).
+
 Dec 17: Added Servo Motor on Pin 7 for a physical "Needle" output. Again I had to swap some pins from the RGB LED to resolve a hardware timer conflict between the servo library and the Tone library (took very long..)
 
 ![Version 4: With Servo](photos/v4_withServo.jpg)
