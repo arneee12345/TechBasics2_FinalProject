@@ -35,6 +35,7 @@ bool lieDetected = false;
 unsigned long timer = 0;
 unsigned long lastTick = 0;      
 int mode = 0; // 0=Idle, 1=Analyzing, 2=Result
+bool ledState = false; // toggle Blinking
 
 Servo needle; 
 
@@ -104,7 +105,8 @@ void loop() {
           stressScore = 0;
           mode = 1;                
           timer = millis();        
-          
+          ledState = true;
+
           Serial.print("Started. Baseline: ");
           Serial.println(lockedBaseline);
           
@@ -128,6 +130,12 @@ void loop() {
         tone(buzzerPin, 2000, 20); 
         lastTick = millis();
         needle.write(random(85, 95));
+        ledState = !ledState;
+      }
+      if (ledState) {
+         setColor(255, 50, 0);
+      } else {
+         setColor(0, 0, 0);    
       }
 
       // Check for stress (drop in resistance)
