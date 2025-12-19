@@ -40,7 +40,7 @@ The circuit uses a voltage divider to measure skin resistance, and various outpu
 | **Red LED** | `D4` | |
 | **Green LED** | `D5` | |
 | **Blue LED** | `D6` | |
-| **Servo** | `D7` | Moves from 10° (Truth) to 170° (Lie), Jittering around 90° (Analyzing)| 
+| **Servo** | `D7` | Moves from 30° (Truth) to 170° (Lie), Jittering around 90° (Analyzing)| 
 | **Buzzer** | `D8` | |
 
 ---
