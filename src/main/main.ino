@@ -163,7 +163,7 @@ void loop() {
             tone(buzzerPin, 1500, 150);
             delay(200);
             tone(buzzerPin, 2000, 400);
-            needle.write(10); 
+            needle.write(30); 
          }
       }
       break;
