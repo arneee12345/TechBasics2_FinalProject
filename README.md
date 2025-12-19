@@ -8,7 +8,13 @@ For my final project, I built a functional **Lie Detector** (Polygraph) using an
 The theory is simple: when a person lies or gets stressed, they micro-sweat or twitch in the fingers. This (sweat or pressure) lowers the electrical resistance of their skin. My Lie Detector measures this resistance compared to a calibrated baseline. If the resistance drops significantly, the machine detects a "Lie," moves a servo needle, and buzzes the alarm.
 
 ## 📺 Demo Video
-*link to demo video (I will add later)*
+<a href="https://youtu.be/oOPQLoe5t_c" target="_blank">
+ <img src="https://img.youtube.com/vi/oOPQLoe5t_c/maxresdefault.jpg" alt="Prototype Demo Video" width="30%" />
+
+Protoype Demo Video
+</a>
+
+*link to finished version demo video (I will add later)*
 
 ---
 
