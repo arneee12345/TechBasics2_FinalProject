@@ -8,6 +8,14 @@ Functional Interactive Prototype. Everything is implemented and working so far.
 ---
 
 ## Change Log
+Jan 02: Painting the packaging in progress
+![Version 7: painting in progress](photos/v7_packaging.jpg)
+
+Jan 02: Taped the packaging as base layer and to make it more stable.
+![Version 6: tape as base layer](photos/v6_packaging.jpg)
+
+Jan 02: Built the blank packaging
+![Version 5: blank packaging](photos/v5_packaging.jpg)
 
 Dec 17: Corrected/Improved the GSR "LieDetection" Logic. Now it identifies all spikes or uncommon movements in resistance and counts them up all together. If certain threshold is crossed it is considered to be a LIE. Otherwise it is considered the TRUTH.
 
