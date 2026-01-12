@@ -61,8 +61,8 @@ The code operates with three main modes:
 ## 📝 Process Documentation
 I have documented the entire development journey, including the bugs I faced, the code changes, and physical prototyping.
 
-* **📄 [CHANGELOG.md](./CHANGELOG.md):** See the detailed history of code updates, hardware updates and the bugs I faced and fixed.
-* **📸 [/photos](./photos):** Check this folder for images of the prototyping and final design process.
+* **📄 [CHANGELOG.md](./docs/CHANGELOG.md):** See the detailed history of code updates, hardware updates and the bugs I faced and fixed.
+* **📸 [/photos](./docs/photos):** Check this folder for images of the prototyping and final design process.
 
 ### Key Challenges I faced:
 **Sensitivity Tuning/Detection Logic:** Finding the right threshold and math to detect and calculate whether some changes in resistance can be considered a "lie" was difficult. I have tried many different approaches. Then thought I found a good one. However there was no real calibration. So, later I changed the logic again completely.
