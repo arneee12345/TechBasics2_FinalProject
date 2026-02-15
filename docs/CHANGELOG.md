@@ -1,13 +1,12 @@
-# Project Name: Lie Detector
-
-## Current Status
-Functional Interactive Prototype. Everything is implemented and working so far. 
-
-**To Do:** Packaging the prototype nicely.
-
----
+# Project: Lie Detector
 
 ## Change Log
+Feb 15: taped cables and painted them and the case in all black design. Added Lie and Truth signs. Added a metal needle (unfolded paper clip).
+![Version 9: Final Packaging](photos/v9_FinalPackaging.jpg)
+
+Feb 15: Added a velcro to the ends of the cables, so the user doesn't have to hold the cables directly.
+![Version 8: velcro added at ends of cables](photos/v8_velcro.jpg)
+
 Jan 02: Painting the packaging in progress
 ![Version 7: painting in progress](photos/v7_packaging.jpg)
 

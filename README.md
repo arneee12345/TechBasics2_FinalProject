@@ -7,16 +7,17 @@ For my final project, I built a functional **Lie Detector** (Polygraph) using an
 
 The theory is simple: when a person lies or gets stressed, they micro-sweat or twitch in the fingers. This (sweat or pressure) lowers the electrical resistance of their skin. My Lie Detector measures this resistance compared to a calibrated baseline. If the resistance drops significantly, the machine detects a "Lie," moves a servo needle, and buzzes the alarm.
 
-## 📺 Demo Video
+## 📺 Prototype Demo Video
 <a href="https://youtu.be/oOPQLoe5t_c" target="_blank">
- <img src="https://img.youtube.com/vi/oOPQLoe5t_c/maxresdefault.jpg" alt="Prototype Demo Video" width="30%" />
-
-Protoype Demo Video
+ <img src="https://img.youtube.com/vi/oOPQLoe5t_c/maxresdefault.jpg" alt="Prototype Demo Video" width="400" />
 </a>
 
-*link to finished version demo video (I will add later)*
+## 📺 Final Cinematic Demo Video
+<a href="https://youtu.be/gjRKQ-gFW1g" target="_blank">
+ <img src="https://img.youtube.com/vi/gjRKQ-gFW1g/maxresdefault.jpg" alt="Final Cinematic Demo Video" width="400" />
+</a>
 
----
+
 
 ## 🛠️ Hardware & Wiring
 The circuit uses a voltage divider to measure skin resistance, and various outputs to give the user feedback.
@@ -40,7 +41,7 @@ The circuit uses a voltage divider to measure skin resistance, and various outpu
 | **Red LED** | `D4` | |
 | **Green LED** | `D5` | |
 | **Blue LED** | `D6` | |
-| **Servo** | `D7` | Moves from 30° (Truth) to 170° (Lie), Jittering around 90° (Analyzing)| 
+| **Servo** | `D7` | Moves from 40° (Truth) to 140° (Lie), Jittering around 90° (Analyzing)| 
 | **Buzzer** | `D8` | |
 
 ---
@@ -67,6 +68,11 @@ I have documented the entire development journey, including the bugs I faced, th
 ### Key Challenges I faced:
 **Sensitivity Tuning/Detection Logic:** Finding the right threshold and math to detect and calculate whether some changes in resistance can be considered a "lie" was difficult. I have tried many different approaches. Then thought I found a good one. However there was no real calibration. So, later I changed the logic again completely.
 
+**Servo Stuttering:** The servo needle would often stutter, freeze, or reset to the middle position specifically during the "Lie Detected" phase, failing to swing to the red/green zone. 
+Activating the loud active buzzer and the high-torque servo motor at the exact same millisecond drew to much current.
+So instead of parallel execution, I introduced a blocking delay to ensure the audio alert finishes playing *before* the servo motor is powered to move.
+* *Old Logic:* `Sound ON` + `Servo MOVE` = **CRASH/STUTTER**
+* *New Logic:* `Sound ON` -> `Sound OFF` -> `Servo MOVE` = **STABLE**
 ---
 
 
@@ -76,3 +82,11 @@ I have documented the entire development journey, including the bugs I faced, th
 * *Arduino `Servo.h` Library Documentation*
 * *[This YouTube tutorial for the basic idea](https://www.youtube.com/watch?v=8ogMm94AH80)*
 * *[This project documentation - same as the video](https://projecthub.arduino.cc/BuildItDR/arduino-lie-detector-41f703#section1)*
+
+
+
+## 🤖 AI & External Code Usage
+Per the class guidelines, I want to be transparent about the tools used in this project:
+
+1.  **Code Debugging & Logic:** I used an AI (Gemini) to help troubleshoot the conflict between the `Servo.h` library and the `tone()` function. The AI suggested re-mapping the pins to avoid hardware timer clashes.
+2.  **Documentation:** AI assisted in formatting this README into Markdown and generating the HTML snippet to resize the YouTube thumbnail.
