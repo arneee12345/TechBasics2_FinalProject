@@ -82,3 +82,10 @@ So instead of parallel execution, I introduced a blocking delay to ensure the au
 * *Arduino `Servo.h` Library Documentation*
 * *[This YouTube tutorial for the basic idea](https://www.youtube.com/watch?v=8ogMm94AH80)*
 * *[This project documentation - same as the video](https://projecthub.arduino.cc/BuildItDR/arduino-lie-detector-41f703#section1)*
+
+
+## 🤖 AI & External Code Usage
+Per the class guidelines, I want to be transparent about the tools used in this project:
+
+1.  **Code Debugging & Logic:** I used an AI (Gemini) to help troubleshoot the conflict between the `Servo.h` library and the `tone()` function. The AI suggested re-mapping the pins to avoid hardware timer clashes.
+2.  **Documentation:** AI assisted in formatting this README into Markdown and generating the HTML snippet to resize the YouTube thumbnail.
