@@ -62,8 +62,8 @@ The code operates with three main modes:
 ## 📝 Process Documentation
 I have documented the entire development journey, including the bugs I faced, the code changes, and physical prototyping.
 
-* **📄 [CHANGELOG.md](./CHANGELOG.md):** See the detailed history of code updates, hardware updates and the bugs I faced and fixed.
-* **📸 [/photos](./photos):** Check this folder for images of the prototyping and final design process.
+* **📄 [CHANGELOG.md](./docs/CHANGELOG.md):** See the detailed history of code updates, hardware updates and the bugs I faced and fixed.
+* **📸 [/photos](./docs/photos):** Check this folder for images of the prototyping and final design process.
 
 ### Key Challenges I faced:
 **Sensitivity Tuning/Detection Logic:** Finding the right threshold and math to detect and calculate whether some changes in resistance can be considered a "lie" was difficult. I have tried many different approaches. Then thought I found a good one. However there was no real calibration. So, later I changed the logic again completely.
@@ -82,11 +82,3 @@ So instead of parallel execution, I introduced a blocking delay to ensure the au
 * *Arduino `Servo.h` Library Documentation*
 * *[This YouTube tutorial for the basic idea](https://www.youtube.com/watch?v=8ogMm94AH80)*
 * *[This project documentation - same as the video](https://projecthub.arduino.cc/BuildItDR/arduino-lie-detector-41f703#section1)*
-
-
-
-## 🤖 AI & External Code Usage
-Per the class guidelines, I want to be transparent about the tools used in this project:
-
-1.  **Code Debugging & Logic:** I used an AI (Gemini) to help troubleshoot the conflict between the `Servo.h` library and the `tone()` function. The AI suggested re-mapping the pins to avoid hardware timer clashes.
-2.  **Documentation:** AI assisted in formatting this README into Markdown and generating the HTML snippet to resize the YouTube thumbnail.
