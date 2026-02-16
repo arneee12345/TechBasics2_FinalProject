@@ -44,6 +44,10 @@ The circuit uses a voltage divider to measure skin resistance, and various outpu
 | **Servo** | `D7` | Moves from 40° (Truth) to 140° (Lie), Jittering around 90° (Analyzing)| 
 | **Buzzer** | `D8` | |
 
+### ⚡ Circuit Diagram
+![Arduino Lie Detector Circuit Diagram](./docs/photos/v10_circuitDiagram.png)
+*Figure 1: Complete wiring diagram created in Tinkercad.*
+
 ---
 
 ## ⚙️ How It Works (The Logic)
@@ -87,5 +91,5 @@ So instead of parallel execution, I introduced a blocking delay to ensure the au
 ## 🤖 AI & External Code Usage
 Per the class guidelines, I want to be transparent about the tools used in this project:
 
-1.  **Code Debugging & Logic:** I used an AI (Gemini) to help troubleshoot the conflict between the `Servo.h` library and the `tone()` function. The AI suggested re-mapping the pins to avoid hardware timer clashes.
+1.  **Code Debugging & Logic:** I used an AI (Gemini) to help troubleshoot the conflict between the `Servo.h` library and the `tone()` function. Which was also the problem of the stuttering servo. The AI suggested re-mapping the pins to avoid hardware timer clashes and adding the Sequencing Logic (audio first, then movement) to fix it.
 2.  **Documentation:** AI assisted in formatting this README into Markdown and generating the HTML snippet to resize the YouTube thumbnail.
